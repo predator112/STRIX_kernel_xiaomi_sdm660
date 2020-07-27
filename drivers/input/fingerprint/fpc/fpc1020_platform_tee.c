@@ -328,7 +328,7 @@ static void config_irq(struct fpc1020_data *fpc1020, bool enabled)
 {
 	static bool irq_enabled = true;
 
-	mutex_lock(&fpc1020->lock);
+	rt_mutex_lock(&fpc1020->lock);
 	if (enabled != irq_enabled) {
 		if (enabled)
 			enable_irq(gpio_to_irq(fpc1020->irq_gpio));
@@ -342,7 +342,7 @@ static void config_irq(struct fpc1020_data *fpc1020, bool enabled)
 		dev_info(fpc1020->dev, "%s: dual config irq status: %s\n", __func__,
 			enabled ?  "true" : "false");
 	}
-	mutex_unlock(&fpc1020->lock);
+	rt_mutex_unlock(&fpc1020->lock);
 }
 
 /**
@@ -493,14 +493,14 @@ static ssize_t irq_enable_set(struct device *dev,
         struct fpc1020_data *fpc1020 = dev_get_drvdata(dev);
 
         if (!strncmp(buf, "1", strlen("1"))) {
-                mutex_lock(&fpc1020->lock);
+                rt_mutex_lock(&fpc1020->lock);
                 enable_irq(gpio_to_irq(fpc1020->irq_gpio));
-                mutex_unlock(&fpc1020->lock);
+                rt_mutex_unlock(&fpc1020->lock);
                 pr_debug("fpc enable irq\n");
         } else if (!strncmp(buf, "0", strlen("0"))) {
-                mutex_lock(&fpc1020->lock);
+                rt_mutex_lock(&fpc1020->lock);
                 disable_irq(gpio_to_irq(fpc1020->irq_gpio));
-                mutex_unlock(&fpc1020->lock);
+                rt_mutex_unlock(&fpc1020->lock);
                 pr_debug("fpc disable irq\n");
         }
 

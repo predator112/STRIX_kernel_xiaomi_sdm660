@@ -785,7 +785,7 @@ static int gf_probe(struct platform_device *pdev)
 	} else {
 		dev_dbg(&gf_dev->spi->dev, "no minor number available!\n");
 		status = -ENODEV;
-		mutex_unlock(&device_list_lock);
+		rt_mutex_unlock(&device_list_lock);
 		goto error_hw;
 	}
 
